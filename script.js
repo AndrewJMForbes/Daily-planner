@@ -1,10 +1,56 @@
 setInterval(function() {
-  $('#currentDay').text(dayjs().format('MMM DD, YYYY hh:mm:ssA'))
-})
+  $('#currentDay').text(dayjs().format('MMM DD, YYYY'))
+  $('#currentTime').text(dayjs().format('hh:mm:ssA')) 
+  }, 1000);
+
 // Wrap all code that interacts with the DOM in a call to jQuery to ensure that
 // the code isn't run until the browser has finished rendering all the elements
-// in the html.
-$(function () {
+// in the html.-----DONE-------
+$(document).ready(function () {
+  $('.saveBtn').on('click', function() {
+    const value = $(this).siblings('.description').val();
+    const time = $(this).parent().attr('id');
+
+    localStorage.setItem(time, value);
+    
+    setTimeout(function(){
+      $('.notification').removeClass('show');
+  }, 5000);
+});
+
+function scheduleHour() {
+  const currentHour = dayjs().hour();
+
+  $('.time-block').each(function() {
+    const blockHour = parseInt($(this).attr('id').split('-')[1]);
+
+
+    if(blockHour < currentHour) {
+      $(this).addClass('past');
+    } else if (blockHour === currentHour) {
+      $(this).removeClass('past');
+      $(this).addClass('present');
+    } else {
+      $(this).removeClass('past');
+        $(this).removeClass('present');
+        $(this).addClass('future');
+    }
+  });
+}
+scheduleHour();
+
+setInterval(scheduleHour, 15000);
+
+  $('#hour-9 .description').val(localStorage.getItem('hour-9'));
+  $('#hour-10 .description').val(localStorage.getItem('hour-10'));
+  $('#hour-11 .description').val(localStorage.getItem('hour-11'));
+  $('#hour-12 .description').val(localStorage.getItem('hour-12'));
+  $('#hour-13 .description').val(localStorage.getItem('hour-1'));
+  $('#hour-14 .description').val(localStorage.getItem('hour-2'));
+  $('#hour-15 .description').val(localStorage.getItem('hour-3'));
+  $('#hour-16 .description').val(localStorage.getItem('hour-4'));
+  $('#hour-17 .description').val(localStorage.getItem('hour-5'));
+
   // TODO: Add a listener for click events on the save button. This code should
   // use the id in the containing time-block as a key to save the user input in
   // local storage. HINT: What does `this` reference in the click listener
@@ -23,10 +69,6 @@ $(function () {
   // the values of the corresponding textarea elements. HINT: How can the id
   // attribute of each time-block be used to do this?
   //
-  // TODO: Add code to display the current date in the header of the page.
-})
-$('#save').on('click', function(event) {
-  event.preventDefault;
-  console.log('save')
-
+  // TODO: Add code to display the current date in the header of the page.//------DONE------
+  $('#currentDay').text(dayjs().format('dddd, MMMM D, YYYY'));
 });
